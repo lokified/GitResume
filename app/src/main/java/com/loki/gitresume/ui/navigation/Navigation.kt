@@ -1,6 +1,7 @@
 package com.loki.gitresume.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.loki.gitresume.AppState
@@ -13,6 +14,7 @@ import com.loki.gitresume.ui.projects.ProjectsScreen
 import com.loki.gitresume.ui.register.RegisterScreen
 import com.loki.gitresume.ui.register.RegisterViewModel
 import com.loki.gitresume.ui.repository.RepositoryScreen
+import com.loki.gitresume.ui.repository.RepositoryViewModel
 
 @Composable
 fun Navigation(appState: AppState) {
@@ -59,7 +61,8 @@ fun Navigation(appState: AppState) {
         }
 
         composable(route = Screen.RepositoryScreen.route) {
-            RepositoryScreen()
+            val viewModel = hiltViewModel<RepositoryViewModel>()
+            RepositoryScreen(viewModel = viewModel)
         }
 
         composable(route = Screen.ProjectsScreen.route) {

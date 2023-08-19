@@ -22,12 +22,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.loki.gitresume.R
+import com.loki.gitresume.domain.models.Repository
 import com.loki.gitresume.util.Project
 
 @Composable
 fun RepositoryItem(
     modifier: Modifier,
-    project: Project,
+    repository: Repository,
     onItemClick: () -> Unit
 ) {
 
@@ -47,7 +48,7 @@ fun RepositoryItem(
 
             Image(
                 painter = painterResource(id = R.drawable.github),
-                contentDescription = project.name,
+                contentDescription = repository.name,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
@@ -58,9 +59,9 @@ fun RepositoryItem(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = project.name, fontSize = 16.sp, color = Color.White.copy(.6f))
+        Text(text = repository.name, fontSize = 16.sp, color = Color.White.copy(.6f))
         Spacer(modifier = Modifier.height(8.dp))
-        Text(text = project.name, fontSize = 13.sp, color = Color.White.copy(.5f))
+        Text(text = repository.description, fontSize = 13.sp, color = Color.White.copy(.5f))
         Spacer(modifier = Modifier.height(8.dp))
         Button( onClick = onItemClick,
             colors = ButtonDefaults.buttonColors(

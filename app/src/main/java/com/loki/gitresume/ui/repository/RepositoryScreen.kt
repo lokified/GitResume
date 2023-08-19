@@ -2,6 +2,7 @@ package com.loki.gitresume.ui.repository
 
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -12,30 +13,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.loki.gitresume.ui.components.ProjectItem
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.loki.gitresume.ui.components.RepositoryItem
-import com.loki.gitresume.ui.theme.GitResumeTheme
-import com.loki.gitresume.util.projects
-import kotlinx.coroutines.delay
 
 @Composable
-fun RepositoryScreen() {
+fun RepositoryScreen(
+    viewModel: RepositoryViewModel
+) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     val openBrowser = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -48,6 +48,20 @@ fun RepositoryScreen() {
                 MaterialTheme.colorScheme.background
             )
     ) {
+
+        if (uiState.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+
+        if (uiState.message.isNotBlank()) {
+            Toast.makeText(
+                context,
+                uiState.message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
 
         Box(
             modifier = Modifier
@@ -76,15 +90,15 @@ fun RepositoryScreen() {
                     }
                 }
 
-                items(projects) { project ->
+                items(uiState.repos) { repository ->
 
                     RepositoryItem(
                         modifier = Modifier.padding(vertical = 16.dp, horizontal = 8.dp),
-                        project = project,
+                        repository = repository,
                         onItemClick = {
                             val intent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse(project.url)
+                                Uri.parse(repository.url)
                             )
                             openBrowser.launch(intent)
                         }
@@ -95,12 +109,13 @@ fun RepositoryScreen() {
     }
 }
 
-@Preview(
-    showBackground = true
-)
-@Composable
-fun RepPreview() {
-    GitResumeTheme {
-        RepositoryScreen()
-    }
-}
+//@Preview(
+//    showBackground = true
+//)
+//@Composable
+//fun RepPreview() {
+//    GitResumeTheme {
+//        val viewModel = hiltViewModel<RepositoryViewModel>()
+//        RepositoryScreen(viewModel = viewModel)
+//    }
+//}
