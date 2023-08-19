@@ -6,10 +6,13 @@ import androidx.navigation.compose.composable
 import com.loki.gitresume.AppState
 import com.loki.gitresume.ui.forgot_password.ForgotPasswordScreen
 import com.loki.gitresume.ui.forgot_password.ForgotPasswordViewModel
+import com.loki.gitresume.ui.home.HomeScreen
 import com.loki.gitresume.ui.login.LoginScreen
 import com.loki.gitresume.ui.login.LoginViewModel
+import com.loki.gitresume.ui.projects.ProjectsScreen
 import com.loki.gitresume.ui.register.RegisterScreen
 import com.loki.gitresume.ui.register.RegisterViewModel
+import com.loki.gitresume.ui.repository.RepositoryScreen
 
 @Composable
 fun Navigation(appState: AppState) {
@@ -23,8 +26,8 @@ fun Navigation(appState: AppState) {
             val viewModel = LoginViewModel()
             LoginScreen(
                 viewModel = viewModel,
-                openSignUpScreen = { route -> appState.navigate(route) },
-                openHomeScreen = { route, pop -> appState.navigateAndPopUp(route, pop)}
+                openSignUpScreen = { route: String -> appState.navigate(route) },
+                openHomeScreen = { route: String, pop: String -> appState.navigateAndPopUp(route, pop)}
             )
         }
 
@@ -49,10 +52,21 @@ fun Navigation(appState: AppState) {
 
         composable(route = Screen.HomeScreen.route) {
 
+            HomeScreen(
+                openRepositoryScreen = { appState.navigate(Screen.RepositoryScreen.route) },
+                openProjectScreen = { appState.navigate(Screen.ProjectsScreen.route) }
+            )
         }
 
         composable(route = Screen.RepositoryScreen.route) {
+            RepositoryScreen()
+        }
 
+        composable(route = Screen.ProjectsScreen.route) {
+
+            ProjectsScreen(
+                openRepositoryScreen = { appState.navigate(Screen.RepositoryScreen.route) }
+            )
         }
     }
 }
@@ -63,4 +77,5 @@ sealed class Screen(val route: String) {
     object ForgotPasswordScreen: Screen("forgot_screen")
     object HomeScreen: Screen("home_screen")
     object RepositoryScreen: Screen("repository_screen")
+    object ProjectsScreen: Screen("project_screen")
 }

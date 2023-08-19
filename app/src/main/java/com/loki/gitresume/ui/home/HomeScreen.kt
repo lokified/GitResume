@@ -1,7 +1,11 @@
 package com.loki.gitresume.ui.home
 
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -12,6 +16,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +29,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BusinessCenter
@@ -39,8 +46,10 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -60,17 +69,26 @@ import com.loki.gitresume.ui.components.ContentBubble
 import com.loki.gitresume.ui.components.HomeBottomBar
 import com.loki.gitresume.ui.components.TimelineNode
 import com.loki.gitresume.ui.components.TimelineNodePosition
+import com.loki.gitresume.ui.theme.GitResumeTheme
 import com.loki.gitresume.util.CircleParametersDefaults
 import com.loki.gitresume.util.LineParametersDefaults
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    openProjectScreen: () -> Unit,
+    openRepositoryScreen: () -> Unit
+) {
+
+    val openBrowser = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { _ -> }
 
     Scaffold(
         bottomBar = {
             HomeBottomBar(
-                onSeeProjectClick = {},
+                onSeeProjectClick = openProjectScreen,
                 onDownloadClick = {}
             )
         }
@@ -102,9 +120,18 @@ fun HomeScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Text(text = stringResource(R.string.sheldon_okware), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = textColor)
+                    Text(
+                        text = stringResource(R.string.sheldon_okware),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = textColor
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = stringResource(R.string.mobile_developer), fontSize = 18.sp, color = textColor)
+                    Text(
+                        text = stringResource(R.string.mobile_developer),
+                        fontSize = 18.sp,
+                        color = textColor
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -120,12 +147,23 @@ fun HomeScreen() {
 
                         Spacer(modifier = Modifier.width(4.dp))
 
-                        Text(text = stringResource(R.string.nairobi_kenya), fontSize = 16.sp, color = textColor)
+                        Text(
+                            text = stringResource(R.string.nairobi_kenya),
+                            fontSize = 16.sp,
+                            color = textColor
+                        )
                     }
                 }
 
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://github.com/lokified")
+                        )
+
+                        openBrowser.launch(intent)
+                              },
                     modifier = Modifier.align(Alignment.BottomStart)
                 ) {
                     Image(
@@ -139,7 +177,14 @@ fun HomeScreen() {
                 }
 
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://linkedin.com/in/sheldon-okware")
+                        )
+
+                        openBrowser.launch(intent)
+                              },
                     modifier = Modifier.align(Alignment.BottomEnd)
                 ) {
                     Image(
@@ -158,21 +203,22 @@ fun HomeScreen() {
                         .align(Alignment.BottomCenter)
                 ) {
 
-                    Column (
+                    Column(
                         modifier = Modifier
                             .align(Alignment.Center)
                     ) {
-                        Box(modifier = Modifier
-                            .offset(y = 100.dp)
-                            .shadow(
-                                elevation = 12.dp,
-                                shape = CircleShape,
-                                spotColor = Color.Black
-                            )
+                        Box(
+                            modifier = Modifier
+                                .offset(y = 100.dp)
+                                .shadow(
+                                    elevation = 12.dp,
+                                    shape = CircleShape,
+                                    spotColor = Color.Black
+                                )
                         ) {
 
                             Image(
-                                painter = painterResource(id = R.drawable.pass),
+                                painter = painterResource(id = R.drawable.profile),
                                 contentDescription = stringResource(R.string.profile_img),
                                 modifier = Modifier
                                     .clip(CircleShape)
@@ -184,7 +230,11 @@ fun HomeScreen() {
 
             Column(
                 modifier = Modifier
-                    .padding(start = 16.dp, top = 120.dp, end = 16.dp)
+                    .padding(start = 16.dp, top = 120.dp, end = 16.dp, bottom = 16.dp)
+                    .background(
+                        color = Color.White.copy(.2f),
+                        shape = RoundedCornerShape(12.dp)
+                    )
             ) {
 
                 Row(
@@ -192,16 +242,30 @@ fun HomeScreen() {
                     horizontalArrangement = Arrangement.SpaceAround,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(top = 24.dp)
                 ) {
-                    ColumnItem(number = "100", title = "Repositories", isClickable = true)
+                    ColumnItem(
+                        number = "100",
+                        title = "Repositories",
+                        isClickable = true,
+                        onItemClick = openRepositoryScreen
+                    )
                     ColumnItem(number = "23", title = "Following")
                     ColumnItem(number = "26", title = "Followers")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "About Sheldon", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "About Sheldon",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = stringResource(R.string.profile_summary))
+                Text(
+                    text = stringResource(R.string.profile_summary),
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -211,6 +275,10 @@ fun HomeScreen() {
                         currentTab = it
                     }
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                SkillsSection()
             }
         }
     }
@@ -454,6 +522,53 @@ fun SelectionTab(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun SkillsSection() {
+
+    val skills = listOf(
+        "Kotlin", "Java" ,"Jetpack Compose", "XML", "Kotlin-coroutines",
+        "Retrofit", "Jetpack Components", "Unit Testing", "Firebase", "CI/CD",
+        "Android Studio and Gradle", "Git"
+        )
+
+    Text(
+        text = "Skills",
+        fontSize = 22.sp,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(horizontal = 8.dp)
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+
+    FlowRow (
+        modifier = Modifier.padding(horizontal = 8.dp)
+    ) {
+        skills.forEach {
+            SkillItem(title = it, modifier = Modifier.padding(4.dp))
+        }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+}
+
+@Composable
+fun SkillItem(
+    title: String,
+    modifier: Modifier = Modifier
+) {
+
+    Box(
+        modifier = modifier.background(
+            color = MaterialTheme.colorScheme.primary.copy(.5f),
+            shape = RoundedCornerShape(4.dp),
+        ),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = title, modifier.padding(2.dp), color = MaterialTheme.colorScheme.background)
+    }
+}
+
 enum class TabPage(val title: String) {
     EXPERIENCE("Experience"),
     EDUCATION("Education")
@@ -461,12 +576,11 @@ enum class TabPage(val title: String) {
 
 @Preview(
     showBackground = true,
-    uiMode = UI_MODE_NIGHT_YES,
-    heightDp = 1000
+    heightDp = 2000
 )
 @Composable
 fun HomePreview() {
-    //GitResumeTheme {
-        HomeScreen()
-    //}
+    GitResumeTheme {
+        HomeScreen(openProjectScreen = {}, openRepositoryScreen = {})
+    }
 }

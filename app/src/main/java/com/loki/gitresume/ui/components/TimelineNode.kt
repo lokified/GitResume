@@ -37,6 +37,7 @@ fun TimelineNode(
     Box(
         modifier = Modifier
             .wrapContentSize()
+            .padding(horizontal = 8.dp)
             .drawBehind {
                 val circleRadiusInPx = circleParameters.radius.toPx()
                 drawCircle(
