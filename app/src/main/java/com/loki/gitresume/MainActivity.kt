@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.loki.gitresume.ui.navigation.Navigation
 import com.loki.gitresume.ui.theme.GitResumeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    Navigation(appState = appState)
                 }
             }
         }

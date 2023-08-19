@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">GitResume</string>
+    <string name="an_email_has_been_sent">An Email has been sent.</string>
+    <string name="go_back_to_login">Go Back To Login</string>
+    <string name="send_password_reset_link">Send password reset link</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="email_will_be_send">An Email will be sent with instructions on how to set up your new password.</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="bg_image">bg_image</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="forgot_password_question">Forgot password?</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="info_icon">info_icon</string>
+    <string name="password_info">Password should have a capital letter and number</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="signin">SignIn</string>
 </resources>
