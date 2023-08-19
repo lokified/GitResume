@@ -18,4 +18,12 @@
     <string name="sign_up">SIGN UP</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="signin">SignIn</string>
+    <string name="location_icon">Location_icon</string>
+    <string name="sheldon_okware">Sheldon Okware</string>
+    <string name="mobile_developer">Mobile Developer</string>
+    <string name="nairobi_kenya">Nairobi, Kenya</string>
+    <string name="github_image">github_image</string>
+    <string name="linkedin_image">linkedin_image</string>
+    <string name="profile_img">profile_img</string>
+    <string name="profile_summary">I\'m an experienced mobile developer with a strong track record in android app development. Over three years, i have honed my skills in coding, UI/UX design and performance optimization. I am dedicated to creating user-centric, visually appealing and high performance mobile apps. My expertise in Kotlin and Java, coupled with commitment to staying updated with industry trends, allows me to deliver top-notch solutions. I thrive in collaborative environment and consistently meet project goals on time.</string>
 </resources>
