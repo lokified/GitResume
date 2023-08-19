@@ -25,7 +25,7 @@ fun Navigation(appState: AppState) {
     ) {
 
         composable(route = Screen.LoginScreen.route) {
-            val viewModel = LoginViewModel()
+            val viewModel = hiltViewModel<LoginViewModel>()
             LoginScreen(
                 viewModel = viewModel,
                 openSignUpScreen = { route: String -> appState.navigate(route) },
@@ -34,7 +34,7 @@ fun Navigation(appState: AppState) {
         }
 
         composable(route = Screen.RegisterScreen.route) {
-            val viewModel = RegisterViewModel()
+            val viewModel = hiltViewModel<RegisterViewModel>()
             RegisterScreen(
                 viewModel = viewModel,
                 openLoginScreen = {

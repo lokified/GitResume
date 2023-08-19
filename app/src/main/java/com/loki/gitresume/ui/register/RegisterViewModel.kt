@@ -2,11 +2,20 @@ package com.loki.gitresume.ui.register
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.FirebaseException
+import com.loki.gitresume.domain.repository.AuthRepository
 import com.loki.gitresume.util.isValidEmail
 import com.loki.gitresume.util.isValidPassword
 import com.loki.gitresume.util.passwordMatches
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegisterViewModel: ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     var state = mutableStateOf(RegisterState())
         private set
@@ -18,6 +27,8 @@ class RegisterViewModel: ViewModel() {
     private val conPassword
         get() = state.value.conPassword
 
+    var isLoading = mutableStateOf(false)
+    var message = mutableStateOf("")
 
     fun onEmailChange(newValue: String) {
         state.value = state.value.copy(email = newValue.trim())
@@ -64,6 +75,20 @@ class RegisterViewModel: ViewModel() {
                 isConPasswordError = true
             )
             return
+        }
+
+        viewModelScope.launch {
+            try {
+                isLoading.value = true
+                authRepository.createAccount(
+                    email, password
+                )
+                isLoading.value = false
+                onRegister()
+            } catch (e: FirebaseException) {
+                isLoading.value = false
+                message.value = e.message ?: "Something went wrong"
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.loki.gitresume.ui.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,14 +46,31 @@ fun LoginScreen(
 ) {
 
     val uiState by viewModel.state
+    val context = LocalContext.current
+
 
     Box(modifier = Modifier.fillMaxSize()) {
+
         Image(
             painter = painterResource(id = R.drawable.sun),
             contentDescription = stringResource(R.string.bg_image),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+
+        if (viewModel.isLoading.value) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+
+        if (viewModel.message.value.isNotBlank()) {
+            Toast.makeText(
+                context,
+                viewModel.message.value,
+                Toast.LENGTH_LONG
+            ).show()
+        }
 
         Box(
             modifier = Modifier
@@ -127,12 +147,12 @@ fun LoginScreen(
     }
 }
 
-@Preview(
-    showBackground = true
-)
-@Composable
-fun LoginPreview() {
-    GitResumeTheme {
-        LoginScreen(viewModel = LoginViewModel(), openHomeScreen = { _, _ -> }, openSignUpScreen = {})
-    }
-}
+//@Preview(
+//    showBackground = true
+//)
+//@Composable
+//fun LoginPreview() {
+//    GitResumeTheme {
+//        LoginScreen(viewModel = LoginViewModel(), openHomeScreen = { _, _ -> }, openSignUpScreen = {})
+//    }
+//}

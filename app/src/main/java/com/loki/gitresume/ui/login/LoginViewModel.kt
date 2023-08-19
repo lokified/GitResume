@@ -2,9 +2,18 @@ package com.loki.gitresume.ui.login
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.FirebaseException
+import com.loki.gitresume.domain.repository.AuthRepository
 import com.loki.gitresume.util.isValidEmail
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel: ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+): ViewModel() {
 
     var state = mutableStateOf(LoginState())
         private set
@@ -15,6 +24,8 @@ class LoginViewModel: ViewModel() {
     private val password
         get() = state.value.password
 
+    var isLoading = mutableStateOf(false)
+    var message = mutableStateOf("")
 
     fun onEmailChange(newValue: String) {
         state.value = state.value.copy(email = newValue.trim())
@@ -46,6 +57,20 @@ class LoginViewModel: ViewModel() {
                 isPasswordError = true
             )
             return
+        }
+
+        viewModelScope.launch {
+            try {
+                isLoading.value = true
+                authRepository.authenticate(
+                    email, password
+                )
+                isLoading.value = false
+                navigateToHome()
+            } catch (e: FirebaseException) {
+                isLoading.value = false
+                message.value = e.message ?: "Something went wrong"
+            }
         }
     }
 }

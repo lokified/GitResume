@@ -1,5 +1,6 @@
 package com.loki.gitresume.ui.register
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +52,8 @@ fun RegisterScreen(
 ) {
 
     val uiState by viewModel.state
+    val context = LocalContext.current
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -57,6 +62,20 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+
+        if (viewModel.isLoading.value) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+
+        if (viewModel.message.value.isNotBlank()) {
+            Toast.makeText(
+                context,
+                viewModel.message.value,
+                Toast.LENGTH_LONG
+            ).show()
+        }
 
         Box(
             modifier = Modifier
@@ -164,12 +183,12 @@ fun RegisterScreen(
     }
 }
 
-@Preview(
-    showBackground = true
-)
-@Composable
-fun RegisterPreview() {
-    GitResumeTheme {
-        RegisterScreen(viewModel = RegisterViewModel(), openLoginScreen = {})
-    }
-}
+//@Preview(
+//    showBackground = true
+//)
+//@Composable
+//fun RegisterPreview() {
+//    GitResumeTheme {
+//        RegisterScreen(viewModel = RegisterViewModel(), openLoginScreen = {})
+//    }
+//}
