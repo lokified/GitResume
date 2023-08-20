@@ -66,6 +66,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.test:core-ktx:1.5.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -114,4 +115,12 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:31.5.0"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
     implementation("com.google.firebase:firebase-auth-ktx")
+
+    //for unit testing API
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("io.mockk:mockk:1.10.5")
+    testImplementation("com.google.truth:truth:1.1.2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation("org.mockito:mockito-inline:3.11.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1")
 }
