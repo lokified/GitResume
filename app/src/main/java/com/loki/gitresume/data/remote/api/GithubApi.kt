@@ -10,12 +10,12 @@ interface GithubApi {
     /**
      * The endpoint gets list of repository
      */
-    @GET("$USERNAME/repos")
+    @GET("users/$USERNAME/repos")
     suspend fun getRepos(): List<RepositoryDto>
 
     /**
      * The endpoint gets the user profile
      */
-    @GET("users/$USERNAME")
+    @GET("user")
     suspend fun getUserProfile(): UserDto
 }

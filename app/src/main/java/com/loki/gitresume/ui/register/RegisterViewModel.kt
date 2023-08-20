@@ -53,6 +53,8 @@ class RegisterViewModel @Inject constructor(
 
     fun register(onRegister: () -> Unit) {
 
+        message.value = ""
+
         if (!email.isValidEmail()) {
             state.value = state.value.copy(
                 emailError = "Email is not valid",

@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.sp
 import com.loki.gitresume.R
 
 val openSerif = FontFamily( Font(R.raw.open_serif_book))
+val motoClub = FontFamily(Font(R.raw.moto_club))
 
 // Set of Material typography styles to start with
 val Typography = Typography(

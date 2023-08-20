@@ -25,12 +25,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,12 +40,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.loki.gitresume.R
 import com.loki.gitresume.ui.components.BasicInput
 import com.loki.gitresume.ui.login.LoginScreen
 import com.loki.gitresume.ui.login.LoginViewModel
 import com.loki.gitresume.ui.navigation.Screen
 import com.loki.gitresume.ui.theme.GitResumeTheme
+import com.loki.gitresume.ui.theme.motoClub
 
 @Composable
 fun RegisterScreen(
@@ -53,7 +58,25 @@ fun RegisterScreen(
 
     val uiState by viewModel.state
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycle = lifecycleOwner.lifecycle
 
+    DisposableEffect(key1 = lifecycle) {
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            when(event) {
+                Lifecycle.Event.ON_PAUSE -> {
+                    viewModel.message.value = ""
+                }
+                else -> {}
+            }
+        }
+
+        lifecycle.addObserver(lifecycleObserver)
+
+        onDispose {
+            lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -75,6 +98,16 @@ fun RegisterScreen(
                 viewModel.message.value,
                 Toast.LENGTH_LONG
             ).show()
+        }
+
+        Column (
+            modifier = Modifier.align(Alignment.TopCenter)
+                .padding(top = 30.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Wanna See More?", fontSize = 32.sp, color = Color.Black.copy(.7f), fontFamily = motoClub)
+            Text(text = "SignUp account", color = Color.Black.copy(.7f))
         }
 
         Box(

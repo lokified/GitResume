@@ -47,6 +47,8 @@ class LoginViewModel @Inject constructor(
 
     fun login(navigateToHome: () -> Unit) {
 
+        message.value = ""
+
         if (!email.isValidEmail()) {
             state.value = state.value.copy(
                 emailError = "Email is not valid",

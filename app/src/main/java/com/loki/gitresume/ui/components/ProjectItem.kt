@@ -39,7 +39,7 @@ fun ProjectItem(
                 .padding(12.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(
-                    Color.White.copy(.4f)
+                    MaterialTheme.colorScheme.primary.copy(.05f)
                 )
         ) {
 

@@ -23,22 +23,22 @@ val projects = listOf(
     ),
     Project(
         image = R.drawable.reet,
-        name = "Drink Tales",
+        name = "Reet",
         url = "https://github.com/lokified/Reet"
     ),
     Project(
         image = R.drawable.booky,
-        name = "Drink Tales",
+        name = "Booky",
         url = "https://github.com/lokified/Booky"
     ),
     Project(
         image = R.drawable.dms,
-        name = "Drink Tales",
+        name = "DMS",
         url = "https://github.com/lokified/Dms"
     ),
     Project(
         image = R.drawable.harry_potter,
-        name = "Drink Tales",
+        name = "Harry Potter",
         url = "https://github.com/lokified/HarryPotterApp"
     )
 )

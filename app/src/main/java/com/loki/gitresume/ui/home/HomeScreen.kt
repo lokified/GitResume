@@ -242,7 +242,7 @@ fun HomeScreen(
                                 contentDescription = stringResource(R.string.profile_img),
                                 modifier = Modifier
                                     .clip(CircleShape)
-                                    .size(150.dp)
+                                    .size(200.dp)
                             )
                         }
                     }
@@ -253,7 +253,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(start = 16.dp, top = 120.dp, end = 16.dp, bottom = 16.dp)
                     .background(
-                        color = Color.White.copy(.2f),
+                        color = MaterialTheme.colorScheme.primary.copy(.03f),
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {
@@ -400,11 +400,11 @@ fun ExperienceTab() {
 
             ContentBubble(
                 modifier = it,
-                startDate = "February 2023",
-                endDate = "Present",
-                title = "Android Developer",
-                company = "Machini Technologies",
-                description = "We did it"
+                startDate = stringResource(R.string.february_2023),
+                endDate = stringResource(R.string.present),
+                title = stringResource(R.string.android_developer),
+                company = stringResource(R.string.machini_technologies),
+                description = stringResource(R.string.machini_description)
             )
         }
 
@@ -421,11 +421,12 @@ fun ExperienceTab() {
         ) {
             ContentBubble(
                 modifier = it,
-                startDate = "May 2022",
-                endDate = "August 2022",
-                title = "Software Developer Intern",
-                company = "Eclectics International",
-                description = "Wololo")
+                startDate = stringResource(R.string.may_2022),
+                endDate = stringResource(R.string.august_2022),
+                title = stringResource(R.string.software_developer_intern),
+                company = stringResource(R.string.eclectics_international),
+                description = stringResource(R.string.eclectics_description)
+            )
         }
 
         TimelineNode(
@@ -437,11 +438,11 @@ fun ExperienceTab() {
         ) {
             ContentBubble(
                 modifier = it,
-                startDate = "February 2021",
-                endDate = "May 2022",
-                title = "Android Developer",
-                company = "Freelance",
-                description = "desr"
+                startDate = stringResource(R.string.february_2021),
+                endDate = stringResource(R.string.may_2022),
+                title = stringResource(R.string.android_developer),
+                company = stringResource(R.string.freelance),
+                description = stringResource(R.string.freelance_description)
             )
 
         }
@@ -468,11 +469,11 @@ fun EducationTab() {
         ) {
             ContentBubble(
                 modifier = it,
-                startDate = "July 2021",
-                endDate = "February 2022",
-                title = "Software Engineering",
-                company = "Moringa School",
-                description = "desr"
+                startDate = stringResource(R.string.july_2021),
+                endDate = stringResource(R.string.february_2022),
+                title = stringResource(R.string.software_engineering),
+                company = stringResource(R.string.moringa_school),
+                description = stringResource(R.string.moringa_description)
             )
         }
 
@@ -486,11 +487,11 @@ fun EducationTab() {
 
             ContentBubble(
                 modifier = it,
-                startDate = "September 2017",
-                endDate = "May 2022",
-                title = "Bsc Mathematics and Computer Science",
-                company = "Taita Taveta University",
-                description = "desr"
+                startDate = stringResource(R.string.september_2017),
+                endDate = stringResource(R.string.may_2022),
+                title = stringResource(R.string.bsc_mathematics_and_computer_science),
+                company = stringResource(R.string.taita_taveta_university),
+                description = stringResource(R.string.taita_description)
             )
         }
     }
@@ -550,13 +551,13 @@ fun SelectionTab(
 fun SkillsSection() {
 
     val skills = listOf(
-        "Kotlin", "Java" ,"Jetpack Compose", "XML", "Kotlin-coroutines",
+        "Kotlin", "Java" ,"Jetpack Compose", "XML", "Kotlin-coroutines", "MVVM", "MVI",
         "Retrofit", "Jetpack Components", "Unit Testing", "Firebase", "CI/CD",
         "Android Studio and Gradle", "Git"
         )
 
     Text(
-        text = "Skills",
+        text = stringResource(R.string.skills),
         fontSize = 22.sp,
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(horizontal = 8.dp)

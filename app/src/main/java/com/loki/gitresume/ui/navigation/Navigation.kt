@@ -34,7 +34,7 @@ fun Navigation(appState: AppState) {
                 viewModel.onAppStart {
                     appState.navigateAndPopUp(Screen.HomeScreen.route, Screen.LoginScreen.route)
                 }
-                delay(3000L)
+                delay(1000L)
                 viewModel.isLoggingIn.value = false
             }
 

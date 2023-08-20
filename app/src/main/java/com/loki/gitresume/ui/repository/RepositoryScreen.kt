@@ -68,7 +68,7 @@ fun RepositoryScreen(
                 .fillMaxSize()
                 .padding(16.dp)
                 .background(
-                    color = Color.White.copy(.2f),
+                    color = MaterialTheme.colorScheme.primary.copy(.04f),
                     shape = RoundedCornerShape(16.dp)
                 )
         ) {
