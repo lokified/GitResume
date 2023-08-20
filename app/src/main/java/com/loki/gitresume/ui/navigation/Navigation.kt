@@ -9,6 +9,7 @@ import com.loki.gitresume.AppState
 import com.loki.gitresume.ui.forgot_password.ForgotPasswordScreen
 import com.loki.gitresume.ui.forgot_password.ForgotPasswordViewModel
 import com.loki.gitresume.ui.home.HomeScreen
+import com.loki.gitresume.ui.home.HomeViewModel
 import com.loki.gitresume.ui.login.LoginScreen
 import com.loki.gitresume.ui.login.LoginViewModel
 import com.loki.gitresume.ui.projects.ProjectsScreen
@@ -73,10 +74,12 @@ fun Navigation(appState: AppState) {
         }
 
         composable(route = Screen.HomeScreen.route) {
-
+            val viewModel = hiltViewModel<HomeViewModel>()
             HomeScreen(
+                viewModel = viewModel,
                 openRepositoryScreen = { appState.navigate(Screen.RepositoryScreen.route) },
-                openProjectScreen = { appState.navigate(Screen.ProjectsScreen.route) }
+                openProjectScreen = { appState.navigate(Screen.ProjectsScreen.route) },
+                openLoginScreen = { appState.navigateAndPopUp(Screen.LoginScreen.route, Screen.HomeScreen.route) }
             )
         }
 

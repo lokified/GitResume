@@ -34,6 +34,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BusinessCenter
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material3.BadgedBox
@@ -69,6 +70,7 @@ import com.loki.gitresume.ui.components.ContentBubble
 import com.loki.gitresume.ui.components.HomeBottomBar
 import com.loki.gitresume.ui.components.TimelineNode
 import com.loki.gitresume.ui.components.TimelineNodePosition
+import com.loki.gitresume.ui.navigation.Screen
 import com.loki.gitresume.ui.theme.GitResumeTheme
 import com.loki.gitresume.util.CircleParametersDefaults
 import com.loki.gitresume.util.LineParametersDefaults
@@ -77,8 +79,10 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel,
     openProjectScreen: () -> Unit,
-    openRepositoryScreen: () -> Unit
+    openRepositoryScreen: () -> Unit,
+    openLoginScreen: () -> Unit
 ) {
 
     val openBrowser = rememberLauncherForActivityResult(
@@ -197,6 +201,17 @@ fun HomeScreen(
                     )
                 }
 
+                IconButton(
+                    onClick = {
+                        viewModel.logout(onLogout = openLoginScreen)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Logout,
+                        contentDescription = stringResource(R.string.logout_icon),
+                        tint = Color.White)
+                }
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -222,6 +237,7 @@ fun HomeScreen(
                                 contentDescription = stringResource(R.string.profile_img),
                                 modifier = Modifier
                                     .clip(CircleShape)
+                                    .size(150.dp)
                             )
                         }
                     }
@@ -574,13 +590,13 @@ enum class TabPage(val title: String) {
     EDUCATION("Education")
 }
 
-@Preview(
-    showBackground = true,
-    heightDp = 2000
-)
-@Composable
-fun HomePreview() {
-    GitResumeTheme {
-        HomeScreen(openProjectScreen = {}, openRepositoryScreen = {})
-    }
-}
+//@Preview(
+//    showBackground = true,
+//    heightDp = 2000
+//)
+//@Composable
+//fun HomePreview() {
+//    GitResumeTheme {
+//        HomeScreen(openProjectScreen = {}, openRepositoryScreen = {})
+//    }
+//}
