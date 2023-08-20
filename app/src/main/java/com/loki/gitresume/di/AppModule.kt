@@ -3,7 +3,9 @@ package com.loki.gitresume.di
 import com.loki.gitresume.BuildConfig
 import com.loki.gitresume.data.remote.api.GithubApi
 import com.loki.gitresume.data.remote.repository.RepoRepositoryImpl
+import com.loki.gitresume.data.remote.repository.UserRepositoryImpl
 import com.loki.gitresume.domain.repository.RepoRepository
+import com.loki.gitresume.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,7 +43,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideApi(api: GithubApi): RepoRepository {
+    fun provideRepoApi(api: GithubApi): RepoRepository {
         return RepoRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserApi(api: GithubApi): UserRepository {
+        return UserRepositoryImpl(api)
     }
 }

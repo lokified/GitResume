@@ -85,6 +85,8 @@ fun HomeScreen(
     openLoginScreen: () -> Unit
 ) {
 
+    val userProfile = viewModel.userProfile.value
+
     val openBrowser = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { _ -> }
@@ -204,7 +206,10 @@ fun HomeScreen(
                 IconButton(
                     onClick = {
                         viewModel.logout(onLogout = openLoginScreen)
-                    }
+                    },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Logout,
@@ -253,26 +258,28 @@ fun HomeScreen(
                     )
             ) {
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 24.dp)
-                ) {
-                    ColumnItem(
-                        number = "100",
-                        title = "Repositories",
-                        isClickable = true,
-                        onItemClick = openRepositoryScreen
-                    )
-                    ColumnItem(number = "23", title = "Following")
-                    ColumnItem(number = "26", title = "Followers")
+                userProfile?.let { user ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 24.dp)
+                    ) {
+                        ColumnItem(
+                            number = user.publicRepos!!.toString(),
+                            title = stringResource(R.string.repositories),
+                            isClickable = true,
+                            onItemClick = openRepositoryScreen
+                        )
+                        ColumnItem(number = user.following!!.toString(), title = stringResource(R.string.following))
+                        ColumnItem(number = user.followers!!.toString(), title = stringResource(R.string.followers))
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "About Sheldon",
+                    text = stringResource(R.string.about_sheldon),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 8.dp)

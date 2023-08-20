@@ -22,7 +22,7 @@ class RepositoryViewModel @Inject constructor(
         getRepository()
     }
 
-    private fun getRepository() {
+    fun getRepository() {
         viewModelScope.launch {
             repoRepository.getRepos().collect { result ->
                 when(result) {

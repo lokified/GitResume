@@ -27,4 +27,8 @@
     <string name="profile_img">profile_img</string>
     <string name="profile_summary">I\'m an experienced mobile developer with a strong track record in android app development. Over three years, i have honed my skills in coding, UI/UX design and performance optimization. I am dedicated to creating user-centric, visually appealing and high performance mobile apps. My expertise in Kotlin and Java, coupled with commitment to staying updated with industry trends, allows me to deliver top-notch solutions. I thrive in collaborative environment and consistently meet project goals on time.</string>
     <string name="logout_icon">logout_icon</string>
+    <string name="repositories">Repositories</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="about_sheldon">About Sheldon</string>
 </resources>
