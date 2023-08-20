@@ -4,15 +4,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.FirebaseException
+import com.loki.gitresume.data.local.datastore.DataStoreStorage
 import com.loki.gitresume.domain.repository.AuthRepository
 import com.loki.gitresume.util.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val dataStore: DataStoreStorage
 ): ViewModel() {
 
     var state = mutableStateOf(LoginState())
@@ -24,6 +27,7 @@ class LoginViewModel @Inject constructor(
     private val password
         get() = state.value.password
 
+    val isLoggingIn = mutableStateOf(true)
     var isLoading = mutableStateOf(false)
     var message = mutableStateOf("")
 
@@ -66,10 +70,21 @@ class LoginViewModel @Inject constructor(
                     email, password
                 )
                 isLoading.value = false
+                dataStore.saveLoggedIn(true)
                 navigateToHome()
             } catch (e: FirebaseException) {
                 isLoading.value = false
                 message.value = e.message ?: "Something went wrong"
+            }
+        }
+    }
+
+    fun onAppStart(openHomeScreen: () -> Unit) {
+        viewModelScope.launch {
+            dataStore.getLoggedIn().collect { loggedIn ->
+                if (loggedIn) {
+                    openHomeScreen()
+                }
             }
         }
     }

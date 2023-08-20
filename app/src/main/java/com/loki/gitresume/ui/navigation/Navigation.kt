@@ -1,6 +1,7 @@
 package com.loki.gitresume.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,6 +16,7 @@ import com.loki.gitresume.ui.register.RegisterScreen
 import com.loki.gitresume.ui.register.RegisterViewModel
 import com.loki.gitresume.ui.repository.RepositoryScreen
 import com.loki.gitresume.ui.repository.RepositoryViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun Navigation(appState: AppState) {
@@ -26,11 +28,29 @@ fun Navigation(appState: AppState) {
 
         composable(route = Screen.LoginScreen.route) {
             val viewModel = hiltViewModel<LoginViewModel>()
-            LoginScreen(
-                viewModel = viewModel,
-                openSignUpScreen = { route: String -> appState.navigate(route) },
-                openHomeScreen = { route: String, pop: String -> appState.navigateAndPopUp(route, pop)}
-            )
+
+            LaunchedEffect(key1 = Unit) {
+                viewModel.onAppStart {
+                    appState.navigateAndPopUp(Screen.HomeScreen.route, Screen.LoginScreen.route)
+                }
+                delay(3000L)
+                viewModel.isLoggingIn.value = false
+            }
+
+            if (!viewModel.isLoggingIn.value) {
+
+                LoginScreen(
+                    viewModel = viewModel,
+                    openSignUpScreen = { route: String -> appState.navigate(route) },
+                    openHomeScreen = { route: String, pop: String ->
+                        appState.navigateAndPopUp(
+                            route,
+                            pop
+                        )
+                    },
+                    openForgotScreen = { route -> appState.navigate(route) }
+                )
+            }
         }
 
         composable(route = Screen.RegisterScreen.route) {
@@ -44,10 +64,10 @@ fun Navigation(appState: AppState) {
         }
 
         composable(route = Screen.ForgotPasswordScreen.route) {
-            val viewModel = ForgotPasswordViewModel()
+            val viewModel = hiltViewModel<ForgotPasswordViewModel>()
             ForgotPasswordScreen(
                 viewModel = viewModel,
-                openLoginScreen = { appState.navigate(Screen.LoginScreen.route) },
+                openLoginScreen = { appState.navigateAndPopUp(Screen.LoginScreen.route, Screen.ForgotPasswordScreen.route) },
                 popScreen = { appState.popUp() }
             )
         }

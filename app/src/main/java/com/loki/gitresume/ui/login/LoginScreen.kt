@@ -42,7 +42,8 @@ import com.loki.gitresume.ui.theme.GitResumeTheme
 fun LoginScreen(
     viewModel: LoginViewModel,
     openSignUpScreen: (String) -> Unit,
-    openHomeScreen: (String, String) -> Unit
+    openHomeScreen: (String, String) -> Unit,
+    openForgotScreen: (String) -> Unit
 ) {
 
     val uiState by viewModel.state
@@ -125,7 +126,12 @@ fun LoginScreen(
                     Text(text = stringResource(R.string.sign_in))
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(text = stringResource(R.string.forgot_password_question), color = Color.White)
+                Text(
+                    text = stringResource(R.string.forgot_password_question),
+                    color = Color.White,
+                    modifier = Modifier.padding(4.dp)
+                        .clickable { openForgotScreen(Screen.ForgotPasswordScreen.route) }
+                )
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row(

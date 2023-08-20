@@ -1,6 +1,8 @@
 package com.loki.gitresume.ui.forgot_password
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -19,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +40,7 @@ fun ForgotPasswordScreen(
 
     val uiState by viewModel.state
     var isFieldVisible by remember { mutableStateOf(true) }
+    val context = LocalContext.current
     
     Column(
         modifier = Modifier.fillMaxSize()
@@ -61,6 +66,22 @@ fun ForgotPasswordScreen(
         else{
             SuccessResetLinkContent {
                 openLoginScreen()
+            }
+        }
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (viewModel.isLoading.value) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            if (viewModel.message.value.isNotBlank()) {
+                Toast.makeText(
+                    context,
+                    viewModel.message.value,
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -138,16 +159,16 @@ fun SuccessResetLinkContent(
     }
 }
 
-@Preview(
-    showBackground = true
-)
-@Composable
-fun ForgotPreview() {
-    GitResumeTheme {
-        ForgotPasswordScreen(
-            viewModel = ForgotPasswordViewModel(),
-            openLoginScreen = { /*TODO*/ }) {
-            
-        }
-    }
-}
+//@Preview(
+//    showBackground = true
+//)
+//@Composable
+//fun ForgotPreview() {
+//    GitResumeTheme {
+//        ForgotPasswordScreen(
+//            viewModel = ForgotPasswordViewModel(),
+//            openLoginScreen = { /*TODO*/ }) {
+//
+//        }
+//    }
+//}
