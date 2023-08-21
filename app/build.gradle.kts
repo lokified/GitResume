@@ -112,9 +112,10 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     //firebase
-    implementation(platform("com.google.firebase:firebase-bom:31.5.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     //for unit testing API
     testImplementation("androidx.arch.core:core-testing:2.2.0")

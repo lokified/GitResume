@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.loki.gitresume.data.local.datastore.DataStoreStorage
 import com.loki.gitresume.domain.models.GitUser
 import com.loki.gitresume.domain.repository.AuthRepository
+import com.loki.gitresume.domain.repository.ResumeRepository
 import com.loki.gitresume.domain.repository.UserRepository
-import com.loki.gitresume.ui.repository.RepositoryViewModel
 import com.loki.gitresume.util.Resource
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -37,6 +37,7 @@ class HomeViewModelTest {
     private val userRepository = mockk<UserRepository>()
     private val authRepository = mockk<AuthRepository>()
     private val dataStoreStorage = mockk<DataStoreStorage>()
+    private val resume = mockk<ResumeRepository>()
 
     private val userProfile = mock<GitUser>()
 
@@ -49,7 +50,8 @@ class HomeViewModelTest {
         viewModel = HomeViewModel(
             userRepository = userRepository,
             authRepository = authRepository,
-            dataStore = dataStoreStorage
+            dataStore = dataStoreStorage,
+            resumeRepository = resume
         )
     }
 
@@ -63,7 +65,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         // ensures it is loading before getting data
-        assert(viewModel.isLoading.value)
+        assert(viewModel.uiState.value.isLoading)
 
     }
 
@@ -91,7 +93,7 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         //ensure it returns an error message
-        assert(viewModel.errorMessage.value.isNotEmpty())
+        assert(viewModel.uiState.value.errorMessage.isNotEmpty())
 
     }
 

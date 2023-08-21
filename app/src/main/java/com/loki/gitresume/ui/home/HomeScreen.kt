@@ -1,9 +1,9 @@
 package com.loki.gitresume.ui.home
 
+import android.Manifest
 import android.content.Intent
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
@@ -43,14 +43,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -59,22 +62,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.loki.gitresume.R
+import com.loki.gitresume.data.permissions.PermissionAction
+import com.loki.gitresume.data.permissions.PermissionDialog
 import com.loki.gitresume.ui.components.ContentBubble
 import com.loki.gitresume.ui.components.HomeBottomBar
 import com.loki.gitresume.ui.components.TimelineNode
 import com.loki.gitresume.ui.components.TimelineNodePosition
-import com.loki.gitresume.ui.navigation.Screen
-import com.loki.gitresume.ui.theme.GitResumeTheme
 import com.loki.gitresume.util.CircleParametersDefaults
 import com.loki.gitresume.util.LineParametersDefaults
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,16 +93,100 @@ fun HomeScreen(
 ) {
 
     val userProfile = viewModel.userProfile.value
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val openBrowser = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { _ -> }
 
+    var isDownloadClick by remember { mutableStateOf(false) }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycle = lifecycleOwner.lifecycle
+
+    DisposableEffect(key1 = lifecycle) {
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            when(event) {
+                Lifecycle.Event.ON_PAUSE -> {
+                    uiState.errorMessage = ""
+                    uiState.message = ""
+                }
+                else -> {}
+            }
+        }
+
+        lifecycle.addObserver(lifecycleObserver)
+
+        onDispose {
+            lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+
+    if (uiState.message.isNotEmpty()) {
+        LaunchedEffect(key1 = uiState.message) {
+            Toast.makeText(
+                context,
+                uiState.message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    if (uiState.errorMessage.isNotEmpty()) {
+        LaunchedEffect(key1 = uiState.errorMessage) {
+            Toast.makeText(
+                context,
+                uiState.errorMessage,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    if (isDownloadClick) {
+        PermissionDialog(
+            context = context,
+            permission = Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            permissionRationale = Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            snackbarHostState = snackbarHostState
+        ) { action ->
+            when (action) {
+
+                PermissionAction.PermissionAlreadyGranted -> {
+                    viewModel.downloadResume()
+                    isDownloadClick = false
+                }
+
+                PermissionAction.PermissionGranted -> {
+                    Toast.makeText(
+                        context,
+                        "Permission Granted",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    viewModel.downloadResume()
+                    isDownloadClick = false
+                }
+
+                PermissionAction.PermissionDenied -> {
+                    Toast.makeText(
+                        context,
+                        "Permission Denied",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    isDownloadClick = false
+                }
+            }
+        }
+    }
+
     Scaffold(
         bottomBar = {
             HomeBottomBar(
                 onSeeProjectClick = openProjectScreen,
-                onDownloadClick = {}
+                onDownloadClick = {
+                    isDownloadClick = true
+                }
             )
         }
     ) { padding ->
@@ -553,7 +644,7 @@ fun SkillsSection() {
     val skills = listOf(
         "Kotlin", "Java" ,"Jetpack Compose", "XML", "Kotlin-coroutines", "MVVM", "MVI",
         "Retrofit", "Jetpack Components", "Unit Testing", "Firebase", "CI/CD",
-        "Android Studio and Gradle", "Git"
+        "Android Studio and Gradle", "Git", "Rest Api's"
         )
 
     Text(
