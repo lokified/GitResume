@@ -2,7 +2,7 @@
 
 Git Resume is an Android app that shows my profile, experience, education, skills, github profile and repositories.
 
-[Download App](https://drive.google.com/file/d/1BS9H3fnDHzI3K6ONkbuO0BoUGM08nPSr/view?usp=sharing)
+[Download App](https://drive.google.com/file/d/1yDCjixrGnaBPKKbQZ7bH_JoqAe3-fH8i/view?usp=sharing)
 
 #### The app utilizes firebase features.
 * Firebase authentication - this includes login and signup with an email.
