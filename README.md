@@ -10,7 +10,12 @@ Git Resume is an Android app that shows my profile, experience, education, skill
   
 ## Demo/screenshots
 <p align="center">
-
+<img src="https://github.com/lokified/GitResume/assets/87479198/3bf50d7a-a96d-4e7b-9e54-3c94a88c64bf" width=30% height=30% >
+<img src="https://github.com/lokified/GitResume/assets/87479198/45edaa4e-465a-40df-8264-ee421cbf9f44" width=30% height=30% >
+<img src="https://github.com/lokified/GitResume/assets/87479198/5ee409e2-4af9-4d59-a4ea-7623ea4af286" width=30% height=30% >
+<img src="https://github.com/lokified/GitResume/assets/87479198/51478de9-5d08-4cdd-8c69-35e73f2a93fd" width=30% height=30% >
+<img src="https://github.com/lokified/GitResume/assets/87479198/23aea697-af42-443a-8364-1a303b010c48" width=30% height=30% >
+<img src="https://github.com/lokified/GitResume/assets/87479198/015806f0-9025-4a65-b3cb-012ac7757831" width=30% height=30% >
 </p>
 
 ## Technologies
